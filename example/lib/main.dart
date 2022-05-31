@@ -121,7 +121,7 @@ class _HomeState extends State<Home> {
                           await SunmiPrinterPro.initPrinter();
                           await SunmiPrinterPro.startTransactionPrint(true);
                           await SunmiPrinterPro.printQRCode(
-                              'https://github.com/brasizza/sunmi_printer');
+                              'https://github.com/HVLoc/sunmi_printer_pro');
                           await SunmiPrinterPro.lineWrap(2);
                           await SunmiPrinterPro.exitTransactionPrint(true);
                         },
