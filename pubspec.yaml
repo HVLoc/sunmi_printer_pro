@@ -1,7 +1,7 @@
 name: sunmi_printer_pro
-description: A new flutter plugin project.
+description: "Support Sunmi Label Version and Null safety. With this package you can connect with Sunmi printers, print text, image, qrcode, barcodes and a custom Esc/Pos if you like."
 version: 0.0.1
-homepage:
+homepage: https://github.com/HVLoc/sunmi_printer_pro.git
 
 environment:
   sdk: ">=2.16.2 <3.0.0"
