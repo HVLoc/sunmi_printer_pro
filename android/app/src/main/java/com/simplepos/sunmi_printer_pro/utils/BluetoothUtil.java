@@ -7,7 +7,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.starpos.printerhelper.R;
+// import com.starpos.printerhelper.R;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -53,49 +53,49 @@ public class BluetoothUtil {
     /**
      * connect bluetooth
      */
-    public static boolean connectBlueTooth(Context context) {
-        if (bluetoothSocket == null) {
-            if (getBTAdapter() == null) {
-                Toast.makeText(context, R.string.toast_3, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            if (!getBTAdapter().isEnabled()) {
-                Toast.makeText(context, R.string.toast_4, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            BluetoothDevice device;
-            if ((device = getDevice(getBTAdapter())) == null) {
-                Toast.makeText(context, R.string.toast_5, Toast.LENGTH_SHORT).show();
-                return false;
-            }
+    // public static boolean connectBlueTooth(Context context) {
+    //     if (bluetoothSocket == null) {
+    //         if (getBTAdapter() == null) {
+    //             Toast.makeText(context, R.string.toast_3, Toast.LENGTH_SHORT).show();
+    //             return false;
+    //         }
+    //         if (!getBTAdapter().isEnabled()) {
+    //             Toast.makeText(context, R.string.toast_4, Toast.LENGTH_SHORT).show();
+    //             return false;
+    //         }
+    //         BluetoothDevice device;
+    //         if ((device = getDevice(getBTAdapter())) == null) {
+    //             Toast.makeText(context, R.string.toast_5, Toast.LENGTH_SHORT).show();
+    //             return false;
+    //         }
 
-            try {
-                bluetoothSocket = getSocket(device);
-                isBlueToothPrinter = true;
-            } catch (IOException e) {
-                Toast.makeText(context, R.string.toast_6, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        }
-        return true;
-    }
+    //         try {
+    //             bluetoothSocket = getSocket(device);
+    //             isBlueToothPrinter = true;
+    //         } catch (IOException e) {
+    //             Toast.makeText(context, R.string.toast_6, Toast.LENGTH_SHORT).show();
+    //             return false;
+    //         }
+    //     }
+    //     return true;
+    // }
 
     /**
      * disconnect bluethooth
      */
-    public static void disconnectBlueTooth(Context context) {
-        if (bluetoothSocket != null) {
-            try {
-                OutputStream out = bluetoothSocket.getOutputStream();
-                out.close();
-                bluetoothSocket.close();
-                bluetoothSocket = null;
-                isBlueToothPrinter = false;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+    // public static void disconnectBlueTooth(Context context) {
+    //     if (bluetoothSocket != null) {
+    //         try {
+    //             OutputStream out = bluetoothSocket.getOutputStream();
+    //             out.close();
+    //             bluetoothSocket.close();
+    //             bluetoothSocket = null;
+    //             isBlueToothPrinter = false;
+    //         } catch (IOException e) {
+    //             e.printStackTrace();
+    //         }
+    //     }
+    // }
 
     /**
      * sendData

@@ -5,7 +5,7 @@ import android.graphics.BitmapFactory;
 
 import androidx.annotation.NonNull;
 
-import com.simplepos.sunmi_printer_pro.utils.starPOSPrintHelper;
+import com.simplepos.sunmi_printer_pro.utils.StarPOSPrintHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,8 +19,6 @@ import io.flutter.plugin.common.MethodChannel;
 public class MainActivity extends FlutterActivity {
     private static final String CHANNEL = "sunmi_printer_pro";
 
-    private static starPOSPrintHelper starPOSPrintHelper;
-
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         super.configureFlutterEngine(flutterEngine);
@@ -29,22 +27,22 @@ public class MainActivity extends FlutterActivity {
                         (call, result) -> {
                             switch (call.method) {
                                 case "BIND_PRINTER_SERVICE":
-                                    starPOSPrintHelper.initStarPOSPrinterService(getContext());
+                                    StarPOSPrintHelper.getInstance().initStarPOSPrinterService(this);
                                     result.success(true);
 
                                     break;
                                 case "UNBIND_PRINTER_SERVICE":
-                                    starPOSPrintHelper.deInitStarPOSPrinterService(getContext());
+                                    StarPOSPrintHelper.getInstance().deInitStarPOSPrinterService(this);
                                     result.success(true);
 
                                     break;
                                 case "INIT_PRINTER":
                                     // ICallback callback = call.argument("callback");
-                                    starPOSPrintHelper.initPrinter();
+                                    StarPOSPrintHelper.getInstance().initPrinter();
                                     result.success(true);
                                     break;
                                 case "GET_UPDATE_PRINTER":
-                                    final int status_code = starPOSPrintHelper.updatePrinter();
+                                    final int status_code = StarPOSPrintHelper.getInstance().updatePrinter();
 
                                     String status_msg = "";
 
@@ -94,23 +92,24 @@ public class MainActivity extends FlutterActivity {
                                     break;
                                 case "PRINT_TEXT":
                                     String text = call.argument("text");
-                                    float size = call.argument("fontSize");
+                                    double temp = call.argument("fontSize") ;
+                                    float size = (float) temp;
                                     boolean isBold = call.argument("isBold");
                                     boolean isUnderLine = call.argument("isUnderLine");
 
-                                    starPOSPrintHelper.printText(text, size, isBold, isUnderLine);
+                                    StarPOSPrintHelper.getInstance().printText(text, size, isBold, isUnderLine);
                                     result.success(true);
 
                                     break;
                                 case "RAW_DATA":
-                                    starPOSPrintHelper.sendRawData((byte[]) call.argument("data"));
+                                    StarPOSPrintHelper.getInstance().sendRawData((byte[]) call.argument("data"));
                                     result.success(true);
                                     break;
                                 case "PRINT_QRCODE":
                                     String data = call.argument("data");
                                     int modulesize = call.argument("modulesize");
                                     int errorlevel = call.argument("errorlevel");
-                                    starPOSPrintHelper.printQr(data, modulesize, errorlevel);
+                                    StarPOSPrintHelper.getInstance().printQr(data, modulesize, errorlevel);
                                     result.success(true);
                                     break;
                                 case "PRINT_BARCODE":
@@ -119,14 +118,14 @@ public class MainActivity extends FlutterActivity {
                                     int textPosition = call.argument("textPosition");
                                     int width = call.argument("width");
                                     int height = call.argument("height");
-                                    starPOSPrintHelper.printBarCode(
+                                    StarPOSPrintHelper.getInstance().printBarCode(
                                             barCodeData,
                                             barcodeType,
                                             textPosition,
                                             width,
                                             height
                                     );
-                                    starPOSPrintHelper.lineWrap(1);
+                                    StarPOSPrintHelper.getInstance().lineWrap(1);
 
                                     result.success(true);
                                     break;
@@ -134,28 +133,28 @@ public class MainActivity extends FlutterActivity {
 
                                 case "LINE_WRAP":
                                     int lines = call.argument("lines");
-                                    starPOSPrintHelper.lineWrap(lines);
+                                    StarPOSPrintHelper.getInstance().lineWrap(lines);
                                     result.success(true);
                                     break;
 //                                case "FONT_SIZE":
 //                                    int fontSize = call.argument("size");
-//                                    starPOSPrintHelper.setFontSize(fontSize);
+//                                    StarPOSPrintHelper.getInstance().setFontSize(fontSize);
 //                                    result.success(true);
 //                                    break;
                                 case "SET_ALIGNMENT":
                                     int alignment = call.argument("alignment");
-                                    starPOSPrintHelper.setAlignment(alignment);
+                                    StarPOSPrintHelper.getInstance().setAlignment(alignment);
                                     result.success(true);
                                     break;
                                 case "PRINT_IMAGE":
                                     byte[] bytes = call.argument("bitmap");
                                     Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                                    starPOSPrintHelper.printBitmap(bitmap, 0);
+                                    StarPOSPrintHelper.getInstance().printBitmap(bitmap, 0);
                                     result.success(true);
 
                                     break;
                                 case "GET_PRINTER_MODE":
-                                    final int mode_code = starPOSPrintHelper.getPrinterMode();
+                                    final int mode_code = StarPOSPrintHelper.getInstance().getPrinterMode();
 
                                     String mode_desc = "";
 
@@ -180,38 +179,38 @@ public class MainActivity extends FlutterActivity {
                                     result.success(mode_desc);
                                     break;
                                 // case "LABEL_LOCATE":
-                                //   starPOSPrintHelper.labelLocate();
+                                //   StarPOSPrintHelper.getInstance().labelLocate();
                                 //   result.success(true);
                                 //   break;
                                 // case "LABEL_OUTPUT":
-                                //   starPOSPrintHelper.labelOutput();
+                                //   StarPOSPrintHelper.getInstance().labelOutput();
                                 //   result.success(true);
                                 //   break;
-//                                case "ENTER_PRINTER_BUFFER":
-//                                    Boolean clearEnter = call.argument("clearEnter");
-//                                    starPOSPrintHelper.enterPrinterBuffer(clearEnter);
-//                                    result.success(true);
-//
-//                                    break;
+                                case "ENTER_PRINTER_BUFFER":
+                                    Boolean clearEnter = call.argument("clearEnter");
+                                    StarPOSPrintHelper.getInstance().printTrans(clearEnter);
+                                    result.success(true);
+
+                                    break;
 //                                case "COMMIT_PRINTER_BUFFER":
-//                                    starPOSPrintHelper.commitPrinterBuffer();
+//                                    StarPOSPrintHelper.getInstance().commitPrinterBuffer();
 //                                    result.success(true);
 //                                    break;
                                 case "CUT_PAPER":
-                                    starPOSPrintHelper.cutpaper();
+                                    StarPOSPrintHelper.getInstance().cutpaper();
                                     result.success(true);
                                     break;
                                 case "OPEN_DRAWER":
-                                    starPOSPrintHelper.openDrawer();
+                                    StarPOSPrintHelper.getInstance().openDrawer();
                                     result.success(true);
                                     break;
 
 //                                case "DRAWER_OPENED":
-//                                    result.success(starPOSPrintHelper.timesOpened());
+//                                    result.success(StarPOSPrintHelper.getInstance().timesOpened());
 //                                    break;
 //
 //                                case "DRAWER_STATUS":
-//                                    result.success(starPOSPrintHelper.drawerStatus());
+//                                    result.success(StarPOSPrintHelper.getInstance().drawerStatus());
 //                                    break;
                                 case "PRINT_ROW":
                                     String colsStr = call.argument("cols");
@@ -231,7 +230,7 @@ public class MainActivity extends FlutterActivity {
                                             colsAlign[i] = alignColumn;
                                         }
 
-                                        starPOSPrintHelper.printColumn(colsText, colsWidth, colsAlign);
+                                        StarPOSPrintHelper.getInstance().printColumn(colsText, colsWidth, colsAlign);
                                         result.success(true);
                                     } catch (Exception err) {
                                         Log.d("SunmiPrinter", err.getMessage());
@@ -239,51 +238,51 @@ public class MainActivity extends FlutterActivity {
                                     break;
                                 case "EXIT_PRINTER_BUFFER":
                                     Boolean clearExit = call.argument("clearExit");
-                                    starPOSPrintHelper.exitPrinterBuffer(clearExit);
+                                    StarPOSPrintHelper.getInstance().exitPrinterBuffer(clearExit);
                                     result.success(true);
                                     break;
                                 case "PRINTER_SERIAL_NUMBER":
-                                    final String serial = starPOSPrintHelper.getPrinterSerialNo();
+                                    final String serial = StarPOSPrintHelper.getInstance().getPrinterSerialNo();
                                     result.success(serial);
                                     break;
                                 case "PRINTER_VERSION":
-                                    final String printer_verison = starPOSPrintHelper.getPrinterVersion();
+                                    final String printer_verison = StarPOSPrintHelper.getInstance().getPrinterVersion();
                                     result.success(printer_verison);
                                     break;
                                 case "PAPER_SIZE":
-                                    final String paper = starPOSPrintHelper.getPrinterPaper();
+                                    final String paper = StarPOSPrintHelper.getInstance().getPrinterPaper();
                                     result.success(paper);
                                     break;
 
                                 // LCD METHODS
                                 case "LCD_COMMAND":
                                     int flag = call.argument("flag");
-                                    starPOSPrintHelper.sendLCDCommand(flag);
+                                    StarPOSPrintHelper.getInstance().sendLCDCommand(flag);
                                     result.success(true);
                                     break;
 //                                case "LCD_STRING":
 //                                    String lcdString = call.argument("string");
-//                                    starPOSPrintHelper.sendLCDString(lcdString);
+//                                    StarPOSPrintHelper.getInstance().sendLCDString(lcdString);
 //                                    result.success(true);
 //                                    break;
                                 case "LCD_BITMAP":
                                     byte[] lcdBitmapData = call.argument("bitmap");
                                     Bitmap lcdBitmap = BitmapFactory.decodeByteArray(
                                             lcdBitmapData, 0, lcdBitmapData.length);
-                                    starPOSPrintHelper.sendLCDBitmap(lcdBitmap);
+                                    StarPOSPrintHelper.getInstance().sendLCDBitmap(lcdBitmap);
                                     result.success(true);
                                     break;
 //                                case "LCD_DOUBLE_STRING":
 //                                    String topText = call.argument("topText");
 //                                    String bottomText = call.argument("bottomText");
-//                                    starPOSPrintHelper.sendLCDDoubleString(topText, bottomText);
+//                                    StarPOSPrintHelper.getInstance().sendLCDDoubleString(topText, bottomText);
 //                                    result.success(true);
 //                                    break;
                                 case "LCD_FILL_STRING":
                                     String lcdFillString = call.argument("string");
                                     int lcdFillSize = call.argument("size");
                                     boolean lcdFill = call.argument("fill");
-                                    starPOSPrintHelper.sendLCDFillString(lcdFillString, lcdFillSize, lcdFill);
+                                    StarPOSPrintHelper.getInstance().sendLCDFillString(lcdFillString, lcdFillSize, lcdFill);
                                     result.success(true);
                                     break;
 //                                case "LCD_MULTI_STRING":
@@ -291,7 +290,7 @@ public class MainActivity extends FlutterActivity {
 //                                    String[] lcdText = Utilities.arrayListToString(lcdTextAL);
 //                                    ArrayList<Integer> lcdAlignAL = call.argument("align");
 //                                    int[] lcdAlign = Utilities.arrayListToIntList(lcdAlignAL);
-//                                    starPOSPrintHelper.sendLCDMultiString(lcdText, lcdAlign);
+//                                    StarPOSPrintHelper.getInstance().sendLCDMultiString(lcdText, lcdAlign);
 //                                    result.success(true);
 //                                    break;
 

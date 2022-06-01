@@ -38,9 +38,6 @@ class SunmiPrinterPro {
     'EXCEPTION': 'Unknown Error code',
   };
 
-  ///A list to make human read the paper size
-  static final List<int> _paperize = [80, 58];
-
   ///*bindingPrinter*
   ///
   ///This method will intializate the printer to start the whole print.
@@ -84,7 +81,7 @@ class SunmiPrinterPro {
   /// With the [SunmiStyle] you can put in one line, the size, alignment and bold
   static Future<void> printText(String text,
       {SunmiPrintAlign? sunmiPrintAlign,
-      int? fontSize,
+      double fontSize = 24,
       bool isBold = false,
       bool isUnderLine = false}) async {
     if (sunmiPrintAlign != null) {
@@ -359,9 +356,9 @@ class SunmiPrinterPro {
   ///*paperSize*
   ///
   /// Get the paper size , because they can change the printers between 56 and 80mm
-  static Future<int> paperSize() async {
-    int? _size = await _channel.invokeMethod("PAPER_SIZE");
-    return _paperize[_size ?? 0];
+  static Future<String> paperSize() async {
+    String? _size = await _channel.invokeMethod("PAPER_SIZE");
+    return _size ?? '';
   }
 
   ///*serialNumber*

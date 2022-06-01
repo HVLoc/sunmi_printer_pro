@@ -2,10 +2,8 @@ package com.simplepos.sunmi_printer_pro.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.RemoteException;
 import android.util.Log;
-import android.widget.Toast;
 
 //import com.starpos.printerhelper.R;
 import com.sunmi.peripheral.printer.ExceptionConst;
@@ -27,9 +25,9 @@ import com.sunmi.peripheral.printer.WoyouConsts;
  * @author kaltin
  * @since create at 2020-02-14
  */
-public class starPOSPrintHelper {
+public class StarPOSPrintHelper {
 
-    private final String TAG = starPOSPrintHelper.class.getName();
+    private final String TAG = StarPOSPrintHelper.class.getName();
 
     public static int NoStarPOSPrinter = 0x00000000;
     public static int CheckStarPOSPrinter = 0x00000001;
@@ -44,12 +42,12 @@ public class starPOSPrintHelper {
      */
     private SunmiPrinterService mPrinterService;
 
-    private static starPOSPrintHelper helper = new starPOSPrintHelper();
+    private static StarPOSPrintHelper helper = new StarPOSPrintHelper();
 
-    private starPOSPrintHelper() {
+    private StarPOSPrintHelper() {
     }
 
-    public static starPOSPrintHelper getInstance() {
+    public static StarPOSPrintHelper getInstance() {
         return helper;
     }
 
@@ -491,6 +489,27 @@ public class starPOSPrintHelper {
             return mPrinterService.getPrinterMode() == 2;
         } catch (RemoteException e) {
             return false;
+        }
+    }
+
+    /**
+     *  Transaction printing:
+     *  enter->print->exit(get result) or
+     *  enter->first print->commit(get result)->twice print->commit(get result)->exit(don't care
+     *  result)
+     */
+    public void printTrans(boolean isClear){
+        if(mPrinterService == null){
+            //TODO Service disconnection processing
+            return;
+        }
+
+        try {
+            mPrinterService.enterPrinterBuffer(isClear);
+
+//            mPrinterService.exitPrinterBufferWithCallback(true,null);
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
     }
 

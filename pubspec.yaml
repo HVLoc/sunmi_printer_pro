@@ -1,6 +1,6 @@
 name: sunmi_printer_pro
 description: "Support Sunmi Label Version and Null safety. With this package you can connect with Sunmi printers, print text, image, qrcode, barcodes and a custom Esc/Pos if you like."
-version: 0.0.1
+version: 0.0.3
 homepage: https://github.com/HVLoc/sunmi_printer_pro.git
 
 environment:
@@ -37,8 +37,8 @@ flutter:
     # -------------------
 
   # To add assets to your plugin package, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - assets/images/
   #   - images/a_dot_ham.jpeg
   #
   # For details regarding assets in packages, see
